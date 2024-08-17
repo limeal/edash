@@ -8,7 +8,7 @@ export default async function Header() {
         <h1 className="text-xl font-bold">Epitech | Modules Tek5</h1>
       </div>
       <div>
-        Made with ❤️ by <a href="https://limeal.fr">Limeal</a>
+        Made with ❤️ by <a href="https://github.com/limeal">Limeal</a>
       </div>
     </header>
   );

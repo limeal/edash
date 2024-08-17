@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import clsx from "clsx";
 
@@ -17,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, 'h-screen')}>{children}</body>
+      <body className={clsx(inter.className, "h-screen")}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
