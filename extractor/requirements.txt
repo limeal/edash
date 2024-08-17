@@ -1,0 +1,7 @@
+pytest-playwright
+playwright
+jupyterlab
+notebook
+python-dotenv
+asyncio
+requests
