@@ -19,6 +19,7 @@ export const columns: ColumnDef<Module>[] = [
     cell: ({ row }) => (
       <Link
         href={row.original.url || "#"}
+        target="_blank"
         className="text-blue-500 hover:underline"
       >
         {row.getValue("title")}
