@@ -1,19 +1,36 @@
-import { addWeeks } from "date-fns";
+import { addWeeks, format, parseISO } from "date-fns";
+
+function isDateEqual(dateUtc1: string, dateUtc2: string) {
+    return format(parseISO(dateUtc1), "yyyy-MM-dd") === format(parseISO(dateUtc2), "yyyy-MM-dd");
+}
 
 export async function getGroupWeeks(): Promise<Record<string, WeekGroup>> {
-    const datesGroupA = [{ from: new Date(2024, 8, 2, 12), to: new Date(2024, 8, 6, 12) }]; // Repeat every 3 weeks
-    const datesGroupB = [{ from: new Date(2024, 8, 9, 12), to: new Date(2024, 8, 13, 12) }];
-    const datesGroupC = [{ from: new Date(2024, 8, 16, 12), to: new Date(2024, 8, 20, 12) }];
+    const datesGroupA = [{ from: new Date("2024-09-02T12:00:00.000Z"), to: new Date("2024-09-06T12:00:00.000Z") }]; // Repeat every 3 weeks
+    const datesGroupB = [{ from: new Date("2024-09-09T12:00:00.000Z"), to: new Date("2024-09-13T12:00:00.000Z") }];
+    const datesGroupC = [{ from: new Date("2024-09-16T12:00:00.000Z"), to: new Date("2024-09-20T12:00:00.000Z") }];
 
-    let lastDateStart = datesGroupC[0].from;
-    let lastDateEnd = datesGroupC[0].to;
-    let skippedWeeks = ["14/10/2024", "28/10/2024", "09/12/2024", "16/12/2024", "23/12/2024", "30/12/2024", "20/01/2025"];
-    for (let currentWeek = 0; lastDateEnd < new Date(2025, 1, 28, 12);) {
-        lastDateStart = addWeeks(lastDateStart, 1);
-        lastDateEnd = addWeeks(lastDateEnd, 1);
+    let lastDateStart = datesGroupA[0].from;
+    let lastDateEnd = datesGroupA[0].to;
+    let skippedWeeks = [
+        new Date("2024-10-14T12:00:00.000Z"),
+        new Date("2024-10-28T12:00:00.000Z"),
+        new Date("2024-12-09T12:00:00.000Z"),
+        new Date("2024-12-16T12:00:00.000Z"),
+        new Date("2024-12-23T12:00:00.000Z"),
+        new Date("2024-12-30T12:00:00.000Z"),
+        new Date("2025-01-20T12:00:00.000Z")
+    ];
 
-        if (skippedWeeks.includes(lastDateStart.toLocaleDateString())) 
+    for (
+        let currentWeek = 0;
+        lastDateEnd < new Date("2025-03-01T12:00:00.000Z");
+        lastDateStart = addWeeks(lastDateStart, 1),
+        lastDateEnd = addWeeks(lastDateEnd, 1)
+    ) {
+
+        if (skippedWeeks.some((skippedWeek) => isDateEqual(lastDateStart.toISOString(), skippedWeek.toISOString())))
             continue;
+        
 
         switch (currentWeek) {
             case 0:
@@ -26,7 +43,7 @@ export async function getGroupWeeks(): Promise<Record<string, WeekGroup>> {
                 datesGroupC.push({ from: lastDateStart, to: lastDateEnd });
                 break;
         }
-    
+
         currentWeek = (currentWeek + 1) % 3;
     }
 
