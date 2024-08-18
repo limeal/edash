@@ -6,12 +6,5 @@ import Image from "next/image";
 export default async function Home() {
   const modules = await getModules();
 
-  return (
-    <>
-      <Header />
-      <main className="p-5">
-        <ModulesTable items={modules} />
-      </main>
-    </>
-  );
+  return <ModulesTable items={modules} />;
 }

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import clsx from "clsx";
+import Header from "@/components/shell/header";
+import Footer from "@/components/shell/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={clsx(inter.className, "h-screen")}>
-        {children}
+        <Header />
+        <main className="p-5">{children}</main>
+        <Footer />
         <Analytics />
       </body>
     </html>
