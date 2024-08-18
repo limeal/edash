@@ -7,6 +7,7 @@ interface Project {
 }
 
 interface Module {
+    moduleid: number;
     title: string;
     url: string;
     code: string;
@@ -18,6 +19,7 @@ interface Module {
     endDate: Date;
     endRegistrationDate: Date;
 
+    favorite?: boolean;
     remote: boolean;
     project?: Project;
     appointements: string[];

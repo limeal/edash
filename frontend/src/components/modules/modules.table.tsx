@@ -31,10 +31,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { columns } from "./modules.table-columns";
+import { ModulesTablePagination } from "./modules.table-pagination";
 
 export function ModulesTable({ items }: { items: Module[] }) {
   const [search, setSearch] = React.useState("");
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "favorite", desc: true }
+  ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -154,26 +157,7 @@ export function ModulesTable({ items }: { items: Module[] }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <ModulesTablePagination table={table} />
     </>
   );
 }

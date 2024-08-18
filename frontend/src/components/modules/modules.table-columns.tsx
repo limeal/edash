@@ -1,9 +1,7 @@
-import { ArrowUpDown } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Tooltip,
   TooltipContent,
@@ -11,8 +9,25 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import SortableHeader from "../ui/sortable-header";
+import { updateFavoriteModule } from "@/actions/modules";
 
 export const columns: ColumnDef<Module>[] = [
+  {
+    accessorKey: "favorite",
+    header: ({ column }) => <SortableHeader column={column} title="F" />,
+    cell: ({ row }) => (
+      <Button
+        className="mr-2 p-1 h-fit"
+        variant="link"
+        onClick={() =>
+          updateFavoriteModule(row.original.moduleid, !row.getValue("favorite"))
+        }
+      >
+        <Star size={16} fill={row.getValue("favorite") ? "gold" : "none"} />
+      </Button>
+    ),
+    sortingFn: 'auto',
+  },
   {
     accessorKey: "title",
     header: "Title",
@@ -60,7 +75,7 @@ export const columns: ColumnDef<Module>[] = [
                 {skills.length}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent className="max-w-md max-h-[350px] p-4 overflow-scroll" side="left">
               <ul className="flex flex-col gap-2 list-disc list-inside">
                 {skills.map((skill) => (
                   <li key={skill}>{skill}</li>
@@ -74,7 +89,9 @@ export const columns: ColumnDef<Module>[] = [
   },
   {
     accessorKey: "startDate",
-    header: ({ column }) => <SortableHeader column={column} title="Start Date" />,
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Start Date" />
+    ),
     cell: ({ row }) => (
       <div>
         {(
@@ -94,7 +111,9 @@ export const columns: ColumnDef<Module>[] = [
   },
   {
     accessorKey: "endRegistrationDate",
-    header: ({ column }) => <SortableHeader column={column} title="End Reg. Date" />,
+    header: ({ column }) => (
+      <SortableHeader column={column} title="End Reg. Date" />
+    ),
     cell: ({ row }) => (
       <div>
         {(
@@ -123,9 +142,16 @@ export const columns: ColumnDef<Module>[] = [
                 {project.name}
               </Link>
             </TooltipTrigger>
-            <TooltipContent className="flex flex-col gap-1 w-80 bg-white text-black p-2 shadow-md border-black">
-              <span>Start Date: {project.startDate?.toLocaleDateString()}</span>
-              <span>End Date: {project.endDate?.toLocaleDateString()}</span>
+            <TooltipContent className="flex flex-col gap-1 w-80 bg-white text-black p-2 shadow-md border-black" side="left">
+              <span>Start Date: {project.startDate?.toLocaleString()}</span>
+              <span>End Date: {project.endDate?.toLocaleString()}</span>
+              <span>
+                Total Days:{" "}
+                {Math.floor(
+                  (project.endDate.getTime() - project.startDate.getTime()) /
+                    (1000 * 60 * 60 * 24)
+                )}
+              </span>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -155,7 +181,7 @@ export const columns: ColumnDef<Module>[] = [
                 {appointements.length}
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
+            <TooltipContent className="p-4" side="left">
               <ul className="flex flex-col gap-2 list-disc list-inside">
                 {appointements.map((appointement) => (
                   <li key={appointement}>{appointement}</li>
