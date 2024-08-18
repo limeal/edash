@@ -9,8 +9,8 @@ import Footer from "@/components/shell/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Epitech | Modules Tek5",
-  description: "List of modules for Tek5 students at Epitech",
+  title: "Epitech | Dashboard",
+  description: "Useful tools for Epitech students in tek5",
 };
 
 export default function RootLayout({
