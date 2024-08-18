@@ -12,6 +12,19 @@ import SortableHeader from "../ui/sortable-header";
 
 export const columns: ColumnDef<Module>[] = [
   {
+    accessorKey: "favorite",
+    header: ({ column }) => <SortableHeader column={column} title="F" />,
+    sortingFn: (a, b) => {
+      if (typeof window === "undefined") return 0;
+      const aFav = window.localStorage.getItem(`favorite-module-${a.original.moduleid}`) === "true";
+      const bFav = window.localStorage.getItem(`favorite-module-${b.original.moduleid}`) === "true";
+
+      if (aFav && !bFav) return -1;
+      if (!aFav && bFav) return 1;
+      return 0;
+    }
+  },
+  {
     accessorKey: "title",
     header: "Title",
     cell: ({ row }) => (

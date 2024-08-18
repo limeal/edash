@@ -57,6 +57,7 @@ export function ModulesTable({ items }: { items: Module[] }) {
         favorites[items[i].moduleid] = true;
     }
     setFavorites(favorites);
+    setSorting((sorting) => [...sorting.filter((sort) => sort.id !== "favorite"), { id: "favorite", desc: false }]);
   }, [items]);
 
   const table = useReactTable({
@@ -163,7 +164,7 @@ export function ModulesTable({ items }: { items: Module[] }) {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {cell.column.id === "title" ? (
+                      {cell.column.id === "favorite" ? (
                         <Button
                           className="mr-2 p-1 h-fit"
                           variant="link"
@@ -183,10 +184,11 @@ export function ModulesTable({ items }: { items: Module[] }) {
                             }
                           />
                         </Button>
-                      ) : null}
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                      ) : (
+                        flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )
                       )}
                     </TableCell>
                   ))}
