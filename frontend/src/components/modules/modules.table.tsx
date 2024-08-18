@@ -94,6 +94,8 @@ export function ModulesTable({ items }: { items: Module[] }) {
         return newFavorites;
       });
     }
+
+    table.setSorting((sorting) => [...sorting.filter((sort) => sort.id !== "favorite"), { id: "favorite", desc: false }]);
   };
 
   return (
