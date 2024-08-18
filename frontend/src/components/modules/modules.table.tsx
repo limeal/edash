@@ -161,27 +161,29 @@ export function ModulesTable({ items }: { items: Module[] }) {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  <TableCell>
-                    <Button
-                      className="mr-2 p-1 h-fit"
-                      variant="link"
-                      onClick={() =>
-                        updateFavorite(
-                          row.original.moduleid,
-                          !favorites[row.original.moduleid]
-                        )
-                      }
-                    >
-                      <Star
-                        size={16}
-                        fill={
-                          favorites[row.original.moduleid] ? "yellow" : "none"
-                        }
-                      />
-                    </Button>
-                  </TableCell>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
+                      {cell.column.id === "title" ? (
+                        <Button
+                          className="mr-2 p-1 h-fit"
+                          variant="link"
+                          onClick={() =>
+                            updateFavorite(
+                              row.original.moduleid,
+                              !favorites[row.original.moduleid]
+                            )
+                          }
+                        >
+                          <Star
+                            size={16}
+                            fill={
+                              favorites[row.original.moduleid]
+                                ? "yellow"
+                                : "none"
+                            }
+                          />
+                        </Button>
+                      ) : null}
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
