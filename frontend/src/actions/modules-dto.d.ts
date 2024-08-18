@@ -19,7 +19,6 @@ interface Module {
     endDate: Date;
     endRegistrationDate: Date;
 
-    favorite?: boolean;
     remote: boolean;
     project?: Project;
     appointements: string[];

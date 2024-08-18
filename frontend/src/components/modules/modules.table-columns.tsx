@@ -9,25 +9,8 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import SortableHeader from "../ui/sortable-header";
-import { updateFavoriteModule } from "@/actions/modules";
 
 export const columns: ColumnDef<Module>[] = [
-  {
-    accessorKey: "favorite",
-    header: ({ column }) => <SortableHeader column={column} title="F" />,
-    cell: ({ row }) => (
-      <Button
-        className="mr-2 p-1 h-fit"
-        variant="link"
-        onClick={() =>
-          updateFavoriteModule(row.original.moduleid, !row.getValue("favorite"))
-        }
-      >
-        <Star size={16} fill={row.getValue("favorite") ? "gold" : "none"} />
-      </Button>
-    ),
-    sortingFn: 'auto',
-  },
   {
     accessorKey: "title",
     header: "Title",
@@ -75,7 +58,10 @@ export const columns: ColumnDef<Module>[] = [
                 {skills.length}
               </Button>
             </TooltipTrigger>
-            <TooltipContent className="max-w-md max-h-[350px] p-4 overflow-scroll" side="left">
+            <TooltipContent
+              className="max-w-md max-h-[350px] p-4 overflow-scroll"
+              side="left"
+            >
               <ul className="flex flex-col gap-2 list-disc list-inside">
                 {skills.map((skill) => (
                   <li key={skill}>{skill}</li>
@@ -142,7 +128,10 @@ export const columns: ColumnDef<Module>[] = [
                 {project.name}
               </Link>
             </TooltipTrigger>
-            <TooltipContent className="flex flex-col gap-1 w-80 bg-white text-black p-2 shadow-md border-black" side="left">
+            <TooltipContent
+              className="flex flex-col gap-1 w-80 bg-white text-black p-2 shadow-md border-black"
+              side="left"
+            >
               <span>Start Date: {project.startDate?.toLocaleString()}</span>
               <span>End Date: {project.endDate?.toLocaleString()}</span>
               <span>

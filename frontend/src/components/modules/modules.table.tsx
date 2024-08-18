@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,9 +35,7 @@ import { ModulesTablePagination } from "./modules.table-pagination";
 
 export function ModulesTable({ items }: { items: Module[] }) {
   const [search, setSearch] = React.useState("");
-  const [sorting, setSorting] = React.useState<SortingState>([
-    { id: "favorite", desc: true }
-  ]);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -47,6 +45,19 @@ export function ModulesTable({ items }: { items: Module[] }) {
       appointements: false,
     });
   const [rowSelection, setRowSelection] = React.useState({});
+  const [favorites, setFavorites] = React.useState<Record<number, boolean>>({});
+
+  React.useEffect(() => {
+    const favorites: Record<number, boolean> = {};
+    for (let i = 0; i < items.length; i++) {
+      if (
+        typeof window !== "undefined" &&
+        window.localStorage.getItem(`favorite-module-${items[i].moduleid}`)
+      )
+        favorites[items[i].moduleid] = true;
+    }
+    setFavorites(favorites);
+  }, [items]);
 
   const table = useReactTable({
     data: items,
@@ -67,6 +78,22 @@ export function ModulesTable({ items }: { items: Module[] }) {
       rowSelection,
     },
   });
+
+  const updateFavorite = (moduleId: number, favorite: boolean) => {
+    if (favorite) {
+      setFavorites((favorites) => ({ ...favorites, [moduleId]: true }));
+      if (typeof window !== "undefined")
+        window.localStorage.setItem(`favorite-module-${moduleId}`, "true");
+    } else {
+      if (typeof window !== "undefined")
+        window.localStorage.removeItem(`favorite-module-${moduleId}`);
+      setFavorites((favorites) => {
+        const newFavorites = { ...favorites };
+        delete newFavorites[moduleId];
+        return newFavorites;
+      });
+    }
+  };
 
   return (
     <>
@@ -134,6 +161,25 @@ export function ModulesTable({ items }: { items: Module[] }) {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
+                  <TableCell>
+                    <Button
+                      className="mr-2 p-1 h-fit"
+                      variant="link"
+                      onClick={() =>
+                        updateFavorite(
+                          row.original.moduleid,
+                          !favorites[row.original.moduleid]
+                        )
+                      }
+                    >
+                      <Star
+                        size={16}
+                        fill={
+                          favorites[row.original.moduleid] ? "yellow" : "none"
+                        }
+                      />
+                    </Button>
+                  </TableCell>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

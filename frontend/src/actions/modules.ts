@@ -2,7 +2,6 @@
 
 import fs from 'fs';
 import csv from 'csv-parser';
-import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -18,7 +17,6 @@ export async function getModules(): Promise<Module[]> {
             .pipe(csv())
             .on('data', (data) => {
                 const moduleid = i++;
-                const favorite = cookies().get(`favorite_${moduleid}`)?.value === 'true';
 
                 results.push({
                     moduleid,
@@ -31,7 +29,6 @@ export async function getModules(): Promise<Module[]> {
                     startDate: convertToDate(data.module_start_date),
                     endDate: convertToDate(data.module_end_date),
                     endRegistrationDate: convertToDate(data.module_end_registration_date),
-                    favorite,
                     remote: data.on_site === 'False',
                     project: data.project_name !== 'N/A' ? {
                         name: data.project_name,
@@ -48,17 +45,4 @@ export async function getModules(): Promise<Module[]> {
                 reject(error);
             });
     });
-}
-
-export async function updateFavoriteModule(moduleId: number, favorite: boolean) {
-    // Save in cookie
-    if (favorite)
-        cookies().set(`favorite_${moduleId}`, 'true', {
-            maxAge: 60 * 60 * 24 * 365,
-        });
-    else
-        cookies().delete(`favorite_${moduleId}`);
-
-    revalidatePath('/');
-    redirect('/');
 }
