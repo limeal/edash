@@ -161,6 +161,41 @@ export const columns: ColumnDef<Module>[] = [
     },
   },
   {
+    accessorKey: "activities",
+    header: "Activities",
+    cell: ({ row }) => {
+      const activities: string[] = row.getValue("activities");
+
+      if (
+        !activities.length ||
+        (activities.length === 1 && activities[0] === "")
+      )
+        return null;
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className="rounded-full px-2 py-1 text-xs h-fit"
+              >
+                {activities.length}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="p-4" side="left">
+              <ul className="flex flex-col gap-2 list-disc list-inside">
+                {activities.map((activity) => (
+                  <li key={activity}>{activity}</li>
+                ))}
+              </ul>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+  },
+  {
     accessorKey: "appointements",
     header: "Appointements",
     cell: ({ row }) => {
@@ -187,6 +222,41 @@ export const columns: ColumnDef<Module>[] = [
               <ul className="flex flex-col gap-2 list-disc list-inside">
                 {appointements.map((appointement) => (
                   <li key={appointement}>{appointement}</li>
+                ))}
+              </ul>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+  },
+  {
+    accessorKey: "locations",
+    header: "Locations",
+    cell: ({ row }) => {
+      const locations: string[] = row.getValue("locations");
+
+      if (
+        !locations.length ||
+        (locations.length === 1 && locations[0] === "")
+      )
+        return null;
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className="rounded-full px-2 py-1 text-xs h-fit"
+              >
+                {locations.length}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="p-4" side="left">
+              <ul className="flex flex-col gap-2 list-disc list-inside">
+                {locations.map((location) => (
+                  <li key={location}>{location}</li>
                 ))}
               </ul>
             </TooltipContent>

@@ -21,5 +21,7 @@ interface Module {
 
     remote: boolean;
     project?: Project;
+    activities: string[];
     appointements: string[];
+    locations: string[];
 }

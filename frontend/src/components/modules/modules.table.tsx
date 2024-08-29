@@ -42,6 +42,7 @@ export function ModulesTable({ items }: { items: Module[] }) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
       startDate: false,
+      activities: false,
       appointements: false,
     });
   const [rowSelection, setRowSelection] = React.useState({});

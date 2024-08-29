@@ -36,7 +36,9 @@ export async function getModules(): Promise<Module[]> {
                         startDate: convertToDate(data.project_start_date),
                         endDate: convertToDate(data.project_end_date),
                     } : undefined,
+                    activities: data.module_activities.split(','),
                     appointements: data.module_appointements.split(','),
+                    locations: data.module_locations.split(','),
                 })
             })
             .on('end', () => {
