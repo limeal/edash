@@ -62,10 +62,11 @@ export const columns: ColumnDef<Module>[] = [
     cell: ({ row }) => {
       const registered: number = row.getValue("registered");
 
-      if (registered === 0) return "N/A";
+      if (registered === 0) return -1;
       return <div>{registered}</div>;
     },
     enableSorting: true,
+    sortingFn: (a, b) => a.original.registered - b.original.registered,
   },
   {
     accessorKey: "skills",

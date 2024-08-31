@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/table";
 import { columns } from "./modules.table-columns";
 import { ModulesTablePagination } from "./modules.table-pagination";
+import { register } from "module";
 
 export function ModulesTable({ items }: { items: Module[] }) {
   const [search, setSearch] = React.useState("");
@@ -44,6 +45,7 @@ export function ModulesTable({ items }: { items: Module[] }) {
       startDate: false,
       activities: false,
       appointements: false,
+      registered: false,
     });
   const [rowSelection, setRowSelection] = React.useState({});
   const [favorites, setFavorites] = React.useState<Record<number, boolean>>({});
