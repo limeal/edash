@@ -55,6 +55,19 @@ export const columns: ColumnDef<Module>[] = [
     enableSorting: true,
   },
   {
+    accessorKey: "registered",
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Registered" />
+    ),
+    cell: ({ row }) => {
+      const registered: number = row.getValue("registered");
+
+      if (registered === 0) return "N/A";
+      return <div>{registered}</div>;
+    },
+    enableSorting: true,
+  },
+  {
     accessorKey: "skills",
     header: "Skills",
     cell: ({ row }) => {
