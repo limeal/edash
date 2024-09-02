@@ -13,19 +13,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import * as React from "react";
+import { StudentCombobox } from "./student.combobox";
 
 export function SearchStudentDialog({
+  students,
   search,
 }: {
+  students: Student[];
   search: (email: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
+  const [email, setEmail] = React.useState("");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setOpen(false);
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
     search(email);
   };
 
@@ -40,14 +42,8 @@ export function SearchStudentDialog({
             <DialogTitle>Search Student</DialogTitle>
           </DialogHeader>
           <div className="flex flex-row gap-4 items-center">
-            <Label htmlFor="name">Email</Label>
-            <Input
-              id="name"
-              name="email"
-              placeholder="email..."
-              type="email"
-              className="col-span-3"
-            />
+            <Label htmlFor="name">Student</Label>
+            <StudentCombobox email={email} setEmail={setEmail} students={students} />
           </div>
           <DialogFooter>
             <Button type="submit">Search</Button>

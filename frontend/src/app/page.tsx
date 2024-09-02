@@ -1,4 +1,4 @@
-import { getModules } from "@/actions/modules";
+import { getModulesAndStudents } from "@/actions/modules";
 import { ModulesTable } from "@/components/modules/modules.table";
 import Header from "@/components/shell/header";
 import Image from "next/image";
@@ -8,8 +8,8 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  const modules = await getModules();
+  const [modules, students] = await getModulesAndStudents();
   const student = searchParams.student as string || undefined;
 
-  return <ModulesTable items={modules} student={student} />;
+  return <ModulesTable items={modules} students={students} student={student} />;
 }

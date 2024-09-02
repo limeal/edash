@@ -33,16 +33,18 @@ import {
 import { columns } from "./modules.table-columns";
 import { ModulesTablePagination } from "./modules.table-pagination";
 import { register } from "module";
-import { SearchStudentDialog } from "./modules.search-student.dialog";
+import { SearchStudentDialog } from "../students/search-student.dialog";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { redirectWithCacheCleaning } from "@/actions/global";
 
 export function ModulesTable({
   items,
+  students,
   student,
 }: {
   items: Module[];
+  students: Student[];
   student?: string;
 }) {
   const [search, setSearch] = React.useState("");
@@ -133,7 +135,18 @@ export function ModulesTable({
           className="max-w-sm"
         />
         <div className="flex flex-row gap-2">
+          <Button
+            variant="default"
+            onClick={() => {
+              redirectWithCacheCleaning("/").then(() => {
+                window.location.replace("/");
+              })
+            }}
+          >
+            Reset
+          </Button>
           <SearchStudentDialog
+            students={students}
             search={(email) => {
               // Redirect to the same page with the student query parameter
               redirectWithCacheCleaning(`?student=${email}`);
