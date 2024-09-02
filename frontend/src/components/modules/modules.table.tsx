@@ -34,20 +34,24 @@ import { columns } from "./modules.table-columns";
 import { ModulesTablePagination } from "./modules.table-pagination";
 import { register } from "module";
 import { SearchStudentDialog } from "./modules.search-student.dialog";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { redirectWithCacheCleaning } from "@/actions/global";
 
-export function ModulesTable({ items }: { items: Module[] }) {
+export function ModulesTable({
+  items,
+  student,
+}: {
+  items: Module[];
+  student?: string;
+}) {
   const [search, setSearch] = React.useState("");
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: "registered", desc: false },
   ]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [
-      {
-        id: "registered",
-        value: "",
-      },
-    ]
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([
+    ...(student ? [{ id: "registered", value: student }] : []),
+  ]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
       startDate: false,
@@ -129,17 +133,12 @@ export function ModulesTable({ items }: { items: Module[] }) {
           className="max-w-sm"
         />
         <div className="flex flex-row gap-2">
-          <SearchStudentDialog search={(email) => {
-            console.log(email);
-            // Update columns filter registered
-            setColumnFilters([
-              ...columnFilters.filter((filter) => filter.id !== "registered"),
-              {
-                id: "registered",
-                value: email,
-              },
-            ]);
-          }} />
+          <SearchStudentDialog
+            search={(email) => {
+              // Redirect to the same page with the student query parameter
+              redirectWithCacheCleaning(`?student=${email}`);
+            }}
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

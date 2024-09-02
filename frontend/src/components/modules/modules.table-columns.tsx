@@ -93,7 +93,6 @@ export const columns: ColumnDef<Module>[] = [
     enableGlobalFilter: true,
     filterFn: (row, id, filterValue) => {
       const registered: string[] = row.original.registered;
-      console.log('Filtering: ', filterValue);
 
       return registered.some((reg) => reg.toLowerCase().includes(filterValue));
     },
