@@ -4,6 +4,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import path from 'path';
 
 function convertToDate(dateString: string) {
     return new Date(`${dateString.split(', ')[0].split('/').reverse().join('-')}T${dateString.split(', ')[1] || '00:00:00'}`);
@@ -12,8 +13,9 @@ function convertToDate(dateString: string) {
 export async function getModules(): Promise<Module[]> {
     return new Promise((resolve, reject) => {
         const results: Module[] = [];
+        const fileLoc = path.join(process.cwd(), 'modules.csv');
         let i = 0;
-        fs.createReadStream('modules.csv')
+        fs.createReadStream(fileLoc)
             .pipe(csv())
             .on('data', (data) => {
                 const moduleid = i++;
