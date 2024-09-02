@@ -33,19 +33,28 @@ import {
 import { columns } from "./modules.table-columns";
 import { ModulesTablePagination } from "./modules.table-pagination";
 import { register } from "module";
+import { SearchStudentDialog } from "./modules.search-student.dialog";
 
 export function ModulesTable({ items }: { items: Module[] }) {
   const [search, setSearch] = React.useState("");
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "registered", desc: false },
+  ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [
+      {
+        id: "registered",
+        value: "",
+      },
+    ]
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
       startDate: false,
+      skills: false,
       activities: false,
       appointements: false,
-      registered: false,
+      endDate: false,
     });
   const [rowSelection, setRowSelection] = React.useState({});
   const [favorites, setFavorites] = React.useState<Record<number, boolean>>({});
@@ -60,7 +69,10 @@ export function ModulesTable({ items }: { items: Module[] }) {
         favorites[items[i].moduleid] = true;
     }
     setFavorites(favorites);
-    setSorting((sorting) => [...sorting.filter((sort) => sort.id !== "favorite"), { id: "favorite", desc: false }]);
+    setSorting((sorting) => [
+      ...sorting.filter((sort) => sort.id !== "favorite"),
+      { id: "favorite", desc: false },
+    ]);
   }, [items]);
 
   const table = useReactTable({
@@ -80,6 +92,7 @@ export function ModulesTable({ items }: { items: Module[] }) {
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter: search,
     },
   });
 
@@ -98,47 +111,62 @@ export function ModulesTable({ items }: { items: Module[] }) {
       });
     }
 
-    table.setSorting((sorting) => [...sorting.filter((sort) => sort.id !== "favorite"), { id: "favorite", desc: false }]);
+    table.setSorting((sorting) => [
+      ...sorting.filter((sort) => sort.id !== "favorite"),
+      { id: "favorite", desc: false },
+    ]);
   };
 
   return (
     <>
-      <div className="flex items-center py-4">
+      <div className="flex flex-row justify-between items-center py-4 w-full">
         <Input
           placeholder="Search..."
           value={search}
           onChange={(event) => {
             setSearch(event.target.value);
-            table.setGlobalFilter(event.target.value);
           }}
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-row gap-2">
+          <SearchStudentDialog search={(email) => {
+            console.log(email);
+            // Update columns filter registered
+            setColumnFilters([
+              ...columnFilters.filter((filter) => filter.id !== "registered"),
+              {
+                id: "registered",
+                value: email,
+              },
+            ]);
+          }} />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className="rounded-md border flex flex-grow overflow-scroll">
         <Table>

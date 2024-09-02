@@ -24,5 +24,5 @@ interface Module {
     activities: string[];
     appointements: string[];
     locations: string[];
-    registered: number;
+    registered: string[];
 }

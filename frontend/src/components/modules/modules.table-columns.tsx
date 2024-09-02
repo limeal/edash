@@ -36,6 +36,7 @@ export const columns: ColumnDef<Module>[] = [
         {row.getValue("title")}
       </Link>
     ),
+    enableGlobalFilter: true,
   },
   {
     accessorKey: "code",
@@ -55,18 +56,48 @@ export const columns: ColumnDef<Module>[] = [
     enableSorting: true,
   },
   {
+    id: "registered",
     accessorKey: "registered",
     header: ({ column }) => (
       <SortableHeader column={column} title="Registered" />
     ),
     cell: ({ row }) => {
-      const registered: number = row.getValue("registered");
+      const registered: string[] = row.getValue("registered");
 
-      if (registered === 0) return -1;
-      return <div>{registered}</div>;
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className="rounded-full px-2 py-1 text-xs h-fit"
+              >
+                {registered.length}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent
+              className="max-w-md max-h-[350px] p-4 overflow-scroll"
+              side="left"
+            >
+              <ul className="flex flex-col gap-2 list-disc list-inside">
+                {registered.map((registered) => (
+                  <li key={registered}>{registered}</li>
+                ))}
+              </ul>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )
     },
     enableSorting: true,
-    sortingFn: (a, b) => a.original.registered - b.original.registered,
+    enableGlobalFilter: true,
+    filterFn: (row, id, filterValue) => {
+      const registered: string[] = row.original.registered;
+      console.log('Filtering: ', filterValue);
+
+      return registered.some((reg) => reg.toLowerCase().includes(filterValue));
+    },
+    sortingFn: (a, b) => a.original.registered.length - b.original.registered.length,
   },
   {
     accessorKey: "skills",

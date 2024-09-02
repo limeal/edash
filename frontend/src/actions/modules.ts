@@ -39,7 +39,7 @@ export async function getModules(): Promise<Module[]> {
                     activities: data.module_activities.split(','),
                     appointements: data.module_appointements.split(','),
                     locations: data.module_locations.split(','),
-                    registered: parseInt(data.module_registered, 10),
+                    registered: data.module_registered.split(',')
                 })
             })
             .on('end', () => {
