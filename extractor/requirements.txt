@@ -5,4 +5,3 @@ notebook
 python-dotenv
 asyncio
 requests
-Flask==3.0.3
