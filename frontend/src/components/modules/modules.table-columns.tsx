@@ -191,13 +191,15 @@ export const columns: ColumnDef<Module>[] = [
             >
               <span>Start Date: {project.startDate?.toLocaleString()}</span>
               <span>End Date: {project.endDate?.toLocaleString()}</span>
-              <span>
-                Total Days:{" "}
-                {Math.floor(
-                  (project.endDate.getTime() - project.startDate.getTime()) /
+              {project.endDate && project.startDate && (
+                <span>
+                  Total Days:{" "}
+                  {Math.floor(
+                    (project.endDate?.getTime() - project.startDate?.getTime()) /
                     (1000 * 60 * 60 * 24)
-                )}
-              </span>
+                  )}
+                </span>
+              )}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
